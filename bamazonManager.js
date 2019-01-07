@@ -9,16 +9,127 @@ const connection = mysql.createConnection({
     database: 'bamazon'
 });
 
-// List a set of menu options:
+const actionChoices = [
+    'View Products for Sale',
+    'View Low Inventory Products',
+    'Restock Existing Product',
+    'Add New Product'
+]
 
-// View Products for Sale
-// If a manager selects View Products for Sale, the app should list every available item: the item IDs, names, prices, and quantities.
+inq.prompt([
+    {
+        type: 'list',
+        name: 'action',
+        message: 'What would you like to do?',
+        choices: actionChoices
+    }
+]).then(inqRes => {
+    const action = inqRes.action;
+    const choiceIndex = actionChoices.indexOf(action);
 
-// View Low Inventory
-// If a manager selects View Low Inventory, then it should list all items with an inventory count lower than five.
+    if (choiceIndex === 0) {
+        printInventory();
+    } else if (choiceIndex === 1) {
+        printLowInventory();
+    } else if (choiceIndex === 2) {
+        addInventory();
+    } else if (choiceIndex === 3) {
+        addNewItem();
+        // Add New Product
+        // If a manager selects Add New Product, it should allow the manager to add a completely new product to the store.
+    }
+})
 
-// Add to Inventory
-// If a manager selects Add to Inventory, your app should display a prompt that will let the manager "add more" of any item currently in the store.
+function printInventory() {
+    const query = connection.query('SELECT item_id, product_name, price, stock_quantity FROM products', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+    })
+    connection.end();
+}
 
-// Add New Product
-// If a manager selects Add New Product, it should allow the manager to add a completely new product to the store.
+function printLowInventory() {
+    const query = connection.query(
+        `SELECT item_id, product_name, stock_quantity 
+        FROM products 
+        WHERE stock_quantity < 5`,
+        (err, res) => {
+        if (err) throw err;
+        console.table(res);
+    })
+    connection.end();
+}
+
+function addInventory() {
+    let ids = [];
+
+    connection.query('SELECT item_id, product_name, stock_quantity FROM products', (err, sqlRes) => {
+        console.log('test');
+        for (let i = 0; i < sqlRes.length; i++) {
+            ids.push(''+sqlRes[i].item_id);
+        }
+
+        console.table(sqlRes);
+
+        inq.prompt([
+            {
+                type: 'list',
+                name: 'selectionID',
+                message: "Select an item's ID to add intentory to it",
+                choices: ids
+            },
+            {
+                type: 'input',
+                name: 'quantityAdded',
+                message: 'How many would you like to add? (enter a number)',
+                validate: function validateQuantity(userInput) {
+                    return Number.isInteger(parseInt(userInput)) && parseInt(userInput) > 0;
+                }
+            }
+        ])
+        .then(inqRes => {
+            connection.query('UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?', 
+            [inqRes.quantityAdded, inqRes.selectionID], err => {
+                if (err) throw err;
+                printInventory();
+            })
+        })
+    })
+}
+
+function addNewItem() {
+    inq.prompt([
+        {
+            type: 'input',
+            name: 'product_name',
+            message: 'What item would you like to add?'
+        },
+        {
+            type: 'input',
+            name: 'department_name',
+            message: 'What department is the item in?'
+        },
+        {
+            type: 'input',
+            name: 'price',
+            message: 'What is the price of the item?',
+            validate: isNumber
+        },
+        {
+            type: 'input',
+            name: 'stock_quantity',
+            message: 'How many would you like to put in stock?',
+            validate: isNumber
+        }
+    ])
+    .then(inqRes => {
+        connection.query('INSERT INTO products SET ?', inqRes, err => {
+            if (err) throw err;
+            printInventory();
+        })
+    })
+}
+
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}

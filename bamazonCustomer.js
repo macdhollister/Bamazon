@@ -39,11 +39,11 @@ const query = connection.query('SELECT * FROM products', (err, sqlRes) => {
             name: 'purchaseQuantity',
             message: 'How many would you like to buy? (enter a number)',
             validate: function validateQuantity(userInput) {
-                return Number.isInteger(parseInt(userInput));
+                return Number.isInteger(parseInt(userInput)) && parseInt(userInput) > 0;
             }
         }
     ])
-    .then(function(inqRes) {
+    .then(inqRes => {
         const product = sqlData[inqRes.selectionID];
         const itemPrice = product.price;
         const quantity = parseInt(inqRes.purchaseQuantity);
@@ -56,12 +56,12 @@ const query = connection.query('SELECT * FROM products', (err, sqlRes) => {
             console.log(`Quantity ordered:\n${quantity}\n`);
             console.log(`Order Subtotal:\n${itemPrice * quantity}`);
 
-            connection.query('UPDATE products SET stock_quantity = ? WHERE item_id = ?', [inStock-quantity, product.item_id], (err) => {
+            connection.query('UPDATE products SET stock_quantity = ? WHERE item_id = ?',
+            [inStock-quantity, product.item_id], err => {
                 if (err) throw err;
                 console.log('Your order is complete!');
                 connection.end();
             })
         }
-
     })
 })
