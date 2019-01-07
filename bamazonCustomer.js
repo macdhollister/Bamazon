@@ -22,14 +22,13 @@ printInventory();
 const query = connection.query('SELECT * FROM products', (err, sqlRes) => {
     if (err) throw err;
 
-    console.table(sqlRes);
-
-    let ids = []
+    const sqlData = {};
     for (let i = 0; i < sqlRes.length; i++) {
-        ids.push(''+sqlRes[i].item_id);
+        sqlData[sqlRes[i].item_id] = sqlRes[i];
     }
 
-    console.log(ids);
+    const ids = Object.keys(sqlData);
+
     inq.prompt([
         {
             type: 'list',
@@ -47,7 +46,8 @@ const query = connection.query('SELECT * FROM products', (err, sqlRes) => {
         }
     ])
     .then(function(inqRes) {
-        // select with a WHERE to get the specific item
+        const selection = sqlData[inqRes.selectionID];
+        console.log(selection.product_name);
     })
 })
 
