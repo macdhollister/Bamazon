@@ -9,8 +9,6 @@ const connection = mysql.createConnection({
     database: 'bamazon'
 });
 
-connection.connect();
-
 function printInventory() {
     const query = connection.query('SELECT item_id, product_name, price, stock_quantity FROM products', (err, res) => {
         if (err) throw err;
@@ -46,9 +44,24 @@ const query = connection.query('SELECT * FROM products', (err, sqlRes) => {
         }
     ])
     .then(function(inqRes) {
-        const selection = sqlData[inqRes.selectionID];
-        console.log(selection.product_name);
+        const product = sqlData[inqRes.selectionID];
+        const itemPrice = product.price;
+        const quantity = parseInt(inqRes.purchaseQuantity);
+        const inStock = product.stock_quantity;
+
+        if (quantity > inStock) {
+            console.log("Sorry, we don't have that many in stock!");
+        } else {
+            console.log(`\nItem:\n${product.product_name}\n`);
+            console.log(`Quantity ordered:\n${quantity}\n`);
+            console.log(`Order Subtotal:\n${itemPrice * quantity}`);
+
+            connection.query('UPDATE products SET stock_quantity = ? WHERE item_id = ?', [inStock-quantity, product.item_id], (err) => {
+                if (err) throw err;
+                console.log('Your order is complete!');
+                connection.end();
+            })
+        }
+
     })
 })
-
-connection.end();
