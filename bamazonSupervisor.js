@@ -62,7 +62,7 @@ function viewProfits() {
     SELECT 
     departments.*, 
     IFNULL(SUM(products.product_sales), 0) AS product_sales, 
-    IFNULL((product_sales - departments.over_head_costs), (0-departments.over_head_costs)) AS total_profit
+    IFNULL((SUM(products.product_sales) - departments.over_head_costs), (0-departments.over_head_costs)) AS total_profit
     FROM
     departments LEFT JOIN products
     ON
