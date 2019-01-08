@@ -56,8 +56,8 @@ const query = connection.query('SELECT * FROM products', (err, sqlRes) => {
             console.log(`Quantity ordered:\n${quantity}\n`);
             console.log(`Order Subtotal:\n${itemPrice * quantity}`);
 
-            connection.query('UPDATE products SET stock_quantity = ? WHERE item_id = ?',
-            [inStock-quantity, product.item_id], err => {
+            connection.query('UPDATE products SET stock_quantity = ?, product_sales = product_sales + ? WHERE item_id = ?',
+            [inStock-quantity, itemPrice*quantity, product.item_id], err => {
                 if (err) throw err;
                 console.log('Your order is complete!');
                 connection.end();
