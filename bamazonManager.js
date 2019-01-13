@@ -41,7 +41,7 @@ inq.prompt([
 })
 
 function printInventory() {
-    const query = connection.query('SELECT item_id, product_name, price, stock_quantity FROM products', (err, res) => {
+    const query = connection.query('SELECT item_id, product_name, department_name, price, stock_quantity FROM products', (err, res) => {
         if (err) throw err;
         console.table(res);
     })
@@ -50,7 +50,7 @@ function printInventory() {
 
 function printLowInventory() {
     const query = connection.query(
-        `SELECT item_id, product_name, stock_quantity 
+        `SELECT item_id, product_name, department_name, stock_quantity 
         FROM products 
         WHERE stock_quantity < 5`,
         (err, res) => {
@@ -64,7 +64,6 @@ function addInventory() {
     let ids = [];
 
     connection.query('SELECT item_id, product_name, stock_quantity FROM products', (err, sqlRes) => {
-        console.log('test');
         for (let i = 0; i < sqlRes.length; i++) {
             ids.push(''+sqlRes[i].item_id);
         }
