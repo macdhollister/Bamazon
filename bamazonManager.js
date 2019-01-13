@@ -1,11 +1,13 @@
+require('dotenv').config()
+
 const mysql = require('mysql');
 const inq = require('inquirer');
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: 'W@2blju&2ZXH&BkC6R51',
+    host: process.env.HOST,
+    port: process.env.PORT,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
     database: 'bamazon'
 });
 
@@ -35,8 +37,6 @@ inq.prompt([
         addInventory();
     } else if (choiceIndex === 3) {
         addNewItem();
-        // Add New Product
-        // If a manager selects Add New Product, it should allow the manager to add a completely new product to the store.
     }
 })
 

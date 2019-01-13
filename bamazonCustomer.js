@@ -1,11 +1,13 @@
+require('dotenv').config()
+
 const mysql = require('mysql');
 const inq = require('inquirer');
 
 const connection = mysql.createConnection({
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: 'W@2blju&2ZXH&BkC6R51',
+    host: process.env.HOST,
+    port: process.env.PORT,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
     database: 'bamazon'
 });
 
