@@ -4,7 +4,7 @@ Bamazon is a simple CLI marketplace with functionality for customers, managers, 
 
 ## Installing Bamazon
 
-Bamazon uses mySQL to store data. In order to use Bamazon locally execute `schema.sql` in mySQL workbench.
+Bamazon uses mySQL to store data. In order to use Bamazon locally, execute `schema.sql` in mySQL workbench.
 
 After downloading this code, run `npm install` to install the required Node.js packages.
 
