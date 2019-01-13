@@ -31,10 +31,24 @@ To use Bamazon, run `node <command>` where the command is one of the following.
 
 The bamazon Customer interface will prompt users for what product and how many of it they wish to purchase.
 
+![customer example](/images/customer.PNG)
+![completed purchase example](/images/orderComplete.PNG)
+
 ### bamazonManager.js
 
 The bamazon Manager interface will prompt users to view items for sale, view items that are in low stock, restock any existing items, or add a new item for sale.
 
+![manager menu](/images/manager_menu.PNG)
+![manager view items](/images/manager_viewProducts.PNG)
+![manager low inventory](/images/manager_lowInventory.PNG)
+![manager restock](/images/manager_restock.PNG)
+![manager new product](/images/manager_newItem.PNG)
+
+
 ### bamazonSupervisor.js
 
 The bamazon Supervisor interface provides information regarding each store department in the database such as overhead costs and total profits. It also allows a supervisor to add new departments.
+
+![supervisor product sales](/images/supervisor_productSales.PNG)
+![supervisor new department](/images/supervisor_newDepartment.PNG)
+
