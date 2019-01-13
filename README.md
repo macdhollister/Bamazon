@@ -5,6 +5,9 @@ Bamazon is a simple CLI marketplace with functionality for customers, managers, 
 ## Installing Bamazon
 
 Bamazon uses mySQL to store data. In order to use Bamazon locally, you must first create a mySQL database through mySQL workbench.
+
+After downloading this code, run `npm install` to install the required Node.js packages.
+
 Additionally, Bamazon requires a `.env` file in order to function properly. Each user must make this file themselves. An example of the format of this file is as follows.
 
 ```
